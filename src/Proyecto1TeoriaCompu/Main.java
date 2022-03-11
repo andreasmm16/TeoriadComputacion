@@ -13,12 +13,12 @@ import com.mxgraph.view.mxGraph;
  */
 public class Main {
      public static MainFrame frame;
-     public static CaminosFrame frame2;
+ 
     public static Grafos grafos;
    
     public static void main(String[] args) {
       frame = new MainFrame();
-      frame2 = new CaminosFrame();
+
       grafos= new Grafos();
       frame.setVisible(true);
       frame.setLocationRelativeTo(null);

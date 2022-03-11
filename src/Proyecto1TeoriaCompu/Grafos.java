@@ -11,14 +11,44 @@ import java.util.ArrayList;
  * @author Andrea
  */
 public class Grafos {
+
     public ArrayList<ArrayList<String>> grafos = new ArrayList<>();
-    String c; 
+   
     int tmp;
-    public Grafos(){
-        c = "";
-        tmp=0;
-    }
-    public void crearGrafo(){
+
+    public Grafos() {
        
+        tmp = 0;
     }
+
+    public int crearGrafo(String nameGra, boolean dirigido) {
+        ArrayList<String> arr = new ArrayList<String>();
+        //Verificar que grafo no exista
+        for (int x = 0; x < grafos.size(); x++) {
+            if (grafos.get(x).get(0) == nameGra) {
+                tmp = 1;
+            }
+        }
+        
+        if(tmp==0){
+            if(dirigido){
+                arr.add("D");
+            }else if(!dirigido){
+                arr.add("N");
+            }
+            
+            arr.add(nameGra);
+            
+            
+            
+            
+            return 1;
+        }else{
+            //Si retorna 0 es que ya existe
+            return 0;
+        }
+        
+    }
+    
+    
 }

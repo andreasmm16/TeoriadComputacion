@@ -4,12 +4,14 @@
  */
 package Proyecto1TeoriaCompu;
 
+import static Proyecto1TeoriaCompu.Main.grafos;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.w3c.dom.css.RGBColor;
 
@@ -19,37 +21,55 @@ import org.w3c.dom.css.RGBColor;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FramePrincipañ
-     */
+    public static Grafos grafos;
+    public static Validaciones vals;
     protected static mxGraph graph;
     private mxGraphComponent graphComp;
+    boolean dirig;
+
     public MainFrame() {
         initComponents();
         this.setSize(new Dimension(1000, 600));
-        getContentPane().setBackground(new Color(212,217,226));
+        getContentPane().setBackground(new Color(212, 217, 226));
+        grafos = new Grafos();
+        vals = new Validaciones();
+        dirig = false;
+        this.setLocationRelativeTo(null);
         initGUI();
     }
-   
-    
+
     public void initGUI() {
         graph = new mxGraph();
         graphComp = new mxGraphComponent(graph);
         graphComp.setBounds(500, 100, 450, 400);
         graphComp.getViewport().setBackground(Color.white);
         getContentPane().add(graphComp);
-      
-        
-        
+
         Object parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
-        Object  v1 = graph.insertVertex(parent, null, "1", 20, 20,50, 50,"shape=ellipse;strokeColor=black;fillColor=yellow;fontSize=20");
-        Object  v2 = graph.insertVertex(parent, null, "2", 60, 60,50, 50,"shape=ellipse;strokeColor=black;fillColor=yellow;fontSize=20");
+        Object v1 = graph.insertVertex(parent, null, "1", 20, 20, 50, 50, "shape=ellipse;strokeColor=black;fillColor=yellow;fontSize=20");
+        Object v2 = graph.insertVertex(parent, null, "2", 60, 60, 50, 50, "shape=ellipse;strokeColor=black;fillColor=yellow;fontSize=20");
         graph.insertEdge(parent, null, "", v1, v2, "endArrow=none");
         graph.getModel().endUpdate();
-        
+        vertexIng.setVisible(false);
+        edgesI.setVisible(false);
+        regresar.setVisible(false);
+        label1.setVisible(false);
+        label2.setVisible(false);
+        v.setVisible(false);
+        e.setVisible(false);
+        dirigido.setVisible(false);
+        nodir.setVisible(false);
+        btnIng.setVisible(false);
+        cbGrafos.setVisible(false);
+        select2.setVisible(false);
+        textArea.setVisible(false);
+        nombregra.setVisible(false);
+        V1.setVisible(false);
+
     }
-/*public void deleteSelected(){
+
+    /*public void deleteSelected(){
     jButton1.addActionListener(new ActionListener(){
     // cell = component.getCellAt(e.getX(), e.getY());
 
@@ -72,20 +92,25 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         vertexIng = new javax.swing.JTextField();
         edgesI = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        label2 = new javax.swing.JLabel();
+        btnIng = new javax.swing.JButton();
+        v = new javax.swing.JLabel();
+        e = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        cbOpc = new javax.swing.JComboBox<>();
+        select2 = new javax.swing.JButton();
+        nodir = new javax.swing.JRadioButton();
+        dirigido = new javax.swing.JRadioButton();
+        cbGrafos = new javax.swing.JComboBox<>();
+        label1 = new javax.swing.JLabel();
+        regresar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textArea = new javax.swing.JTextArea();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        select = new javax.swing.JButton();
+        nombregra = new javax.swing.JTextField();
+        V1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(212, 217, 226));
@@ -99,31 +124,41 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().add(jLabel1);
         jLabel1.setBounds(10, 10, 430, 50);
         getContentPane().add(vertexIng);
-        vertexIng.setBounds(80, 180, 240, 30);
+        vertexIng.setBounds(80, 200, 240, 30);
         getContentPane().add(edgesI);
-        edgesI.setBounds(80, 140, 240, 30);
+        edgesI.setBounds(80, 240, 240, 30);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel2.setText("Representar Grafo en forma G= ({V},{E}):");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(20, 310, 280, 20);
+        label2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        label2.setText("Representar Grafo en forma G= ({V},{E}):");
+        getContentPane().add(label2);
+        label2.setBounds(20, 370, 280, 20);
 
-        jButton1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jButton1.setText("Ingresar");
-        getContentPane().add(jButton1);
-        jButton1.setBounds(140, 260, 110, 30);
+        btnIng.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btnIng.setText("Ingresar");
+        btnIng.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnIngMouseClicked(evt);
+            }
+        });
+        btnIng.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnIng);
+        btnIng.setBounds(140, 320, 110, 30);
 
-        jLabel3.setFont(new java.awt.Font("Arial Black", 0, 15)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("{V}");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(20, 140, 50, 30);
+        v.setFont(new java.awt.Font("Arial Black", 0, 15)); // NOI18N
+        v.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        v.setText("{V}");
+        getContentPane().add(v);
+        v.setBounds(30, 200, 50, 30);
 
-        jLabel5.setFont(new java.awt.Font("Arial Black", 0, 15)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("{E}");
-        getContentPane().add(jLabel5);
-        jLabel5.setBounds(20, 180, 50, 30);
+        e.setFont(new java.awt.Font("Arial Black", 0, 15)); // NOI18N
+        e.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        e.setText("{E}");
+        getContentPane().add(e);
+        e.setBounds(40, 240, 50, 30);
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 102, 102));
@@ -132,55 +167,226 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().add(jLabel6);
         jLabel6.setBounds(10, 70, 90, 30);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ingresar Grafo", "Representar Grafo en forma G= ({V} {E})", "Mostrar Grafo de manera gráfica", "Calcular grado de un Vértice", "Verificar ciclos en Grafos", "Validar camino en Grafo\"" }));
-        getContentPane().add(jComboBox1);
-        jComboBox1.setBounds(90, 70, 240, 30);
+        cbOpc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ingresar Grafo", "Representar Grafo en forma G= ({V} {E})", "Mostrar Grafo de manera gráfica", "Calcular grado de un Vértice", "Verificar ciclos en Grafos", "Validar camino en Grafo" }));
+        getContentPane().add(cbOpc);
+        cbOpc.setBounds(90, 70, 240, 30);
 
-        jButton2.setBackground(new java.awt.Color(0, 153, 153));
-        jButton2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Proyecto1TeoriaCompu/cursor.png"))); // NOI18N
-        jButton2.setText("Seleccionar");
-        getContentPane().add(jButton2);
-        jButton2.setBounds(210, 340, 140, 30);
+        select2.setBackground(new java.awt.Color(0, 153, 153));
+        select2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        select2.setForeground(new java.awt.Color(255, 255, 255));
+        select2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Proyecto1TeoriaCompu/cursor.png"))); // NOI18N
+        select2.setText("Seleccionar");
+        getContentPane().add(select2);
+        select2.setBounds(210, 400, 140, 30);
 
-        jRadioButton1.setBackground(new java.awt.Color(212, 217, 226));
-        jRadioButton1.setText("Grafo No Dirigido");
-        getContentPane().add(jRadioButton1);
-        jRadioButton1.setBounds(200, 220, 120, 25);
+        nodir.setBackground(new java.awt.Color(212, 217, 226));
+        nodir.setText("Grafo No Dirigido");
+        nodir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nodirMouseClicked(evt);
+            }
+        });
+        getContentPane().add(nodir);
+        nodir.setBounds(200, 280, 120, 25);
 
-        jRadioButton2.setBackground(new java.awt.Color(212, 217, 226));
-        jRadioButton2.setText("Grafo Dirigido");
-        getContentPane().add(jRadioButton2);
-        jRadioButton2.setBounds(80, 220, 110, 25);
+        dirigido.setBackground(new java.awt.Color(212, 217, 226));
+        dirigido.setText("Grafo Dirigido");
+        dirigido.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dirigidoMouseClicked(evt);
+            }
+        });
+        getContentPane().add(dirigido);
+        dirigido.setBounds(70, 280, 110, 25);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(jComboBox2);
-        jComboBox2.setBounds(20, 340, 170, 30);
+        cbGrafos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(cbGrafos);
+        cbGrafos.setBounds(20, 400, 170, 30);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel4.setText("Ingresar grafo:");
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(10, 120, 130, 20);
+        label1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        label1.setText("Ingresar grafo:");
+        getContentPane().add(label1);
+        label1.setBounds(10, 120, 130, 20);
 
-        jButton3.setBackground(new java.awt.Color(0, 153, 153));
-        jButton3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Proyecto1TeoriaCompu/cursor.png"))); // NOI18N
-        jButton3.setText("Seleccionar");
-        getContentPane().add(jButton3);
-        jButton3.setBounds(340, 70, 140, 30);
+        regresar.setBackground(new java.awt.Color(0, 204, 153));
+        regresar.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        regresar.setForeground(new java.awt.Color(255, 255, 255));
+        regresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Proyecto1TeoriaCompu/cursor.png"))); // NOI18N
+        regresar.setText("Regresar");
+        regresar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                regresarMouseClicked(evt);
+            }
+        });
+        getContentPane().add(regresar);
+        regresar.setBounds(340, 110, 140, 30);
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        textArea.setEditable(false);
+        textArea.setColumns(20);
+        textArea.setRows(5);
+        jScrollPane1.setViewportView(textArea);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(20, 380, 330, 50);
+        jScrollPane1.setBounds(20, 440, 330, 50);
+
+        jButton4.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Proyecto1TeoriaCompu/cerrar-sesion.png"))); // NOI18N
+        jButton4.setText("SALIR");
+        jButton4.setBorder(null);
+        jButton4.setBorderPainted(false);
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jButton4);
+        jButton4.setBounds(840, 20, 130, 30);
+
+        jButton5.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Proyecto1TeoriaCompu/eraser.png"))); // NOI18N
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jButton5);
+        jButton5.setBounds(880, 70, 70, 30);
+
+        select.setBackground(new java.awt.Color(0, 153, 153));
+        select.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        select.setForeground(new java.awt.Color(255, 255, 255));
+        select.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Proyecto1TeoriaCompu/cursor.png"))); // NOI18N
+        select.setText("Seleccionar");
+        select.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                selectMouseClicked(evt);
+            }
+        });
+        getContentPane().add(select);
+        select.setBounds(340, 70, 140, 30);
+        getContentPane().add(nombregra);
+        nombregra.setBounds(80, 160, 240, 30);
+
+        V1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        V1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        V1.setText("Nombre:");
+        getContentPane().add(V1);
+        V1.setBounds(10, 160, 70, 30);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        graph.selectChildCell();
+        graph.removeCells();
+    }//GEN-LAST:event_jButton5MouseClicked
+
+    private void btnIngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIngActionPerformed
+
+    private void btnIngMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngMouseClicked
+        if (nombregra.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (!dirigido.isSelected() && !nodir.isSelected()) {
+            JOptionPane.showMessageDialog(null, "Indique si grafo es dirigido o no dirigido", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (vals.validacionesVertex(vertexIng.getText()) == 0) {
+            JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesVertex(vertexIng.getText()) == 1) {
+            JOptionPane.showMessageDialog(null, "Último carácter debe ser \"}\" en Vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesVertex(vertexIng.getText()) == 2) {
+            JOptionPane.showMessageDialog(null, "Primer carácter debe ser \"{\" en Vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesVertex(vertexIng.getText()) == 3) {
+            JOptionPane.showMessageDialog(null, "Elementos en vértices vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesVertex(vertexIng.getText()) == 4) {
+            JOptionPane.showMessageDialog(null, "Elementos en vértices no pueden terminar con coma {num,} -> X", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesVertex(vertexIng.getText()) == 5) {
+            JOptionPane.showMessageDialog(null, "No pueden ir espacios vacios en vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        if (dirigido.isSelected()) {
+            dirig = true;
+        } else if (nodir.isSelected()) {
+            dirig = false;
+        }
+
+        if (vals.validacionesEdges(edgesI.getText(), dirig) == 0) {
+            JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 1) {
+            JOptionPane.showMessageDialog(null, "Último carácter debe ser \"}\" en Aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 2) {
+            JOptionPane.showMessageDialog(null, "Primer carácter debe ser \"}\" en Aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 3) {
+            JOptionPane.showMessageDialog(null, "Elementos en aristas vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 4) {
+            JOptionPane.showMessageDialog(null, "Elementos deben ser ingresados (num,num) porque son grafos dirigidos", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 5) {
+            JOptionPane.showMessageDialog(null, "Elementos deben ser ingresados {num,num} porque son grafos dirigidos", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 6) {
+            JOptionPane.showMessageDialog(null, "Elementos no pueden terminar en coma -> {(),} | {{},} ---> X", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 7) {
+            JOptionPane.showMessageDialog(null, "¡Paréntesis Incompletos en Aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 8) {
+            JOptionPane.showMessageDialog(null, "¡Llaves Incompletas en Aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 9) {
+            JOptionPane.showMessageDialog(null, "¡No pueden ir más de dos elementos dentro de la secuencia! Debe ser-->(num,num) en aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 10) {
+            JOptionPane.showMessageDialog(null, "¡No pueden ir más de dos elementos dentro de la secuencia! Debe ser-->{num,num} en aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
+            //HACER VERIFICACION QUE ARISTAS EXISTAN EN VERTICES INGRESADOS
+            //SETEAR BOOLEAN DIRIG
+        }
+
+    }//GEN-LAST:event_btnIngMouseClicked
+
+    private void dirigidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dirigidoMouseClicked
+        nodir.setSelected(false);
+    }//GEN-LAST:event_dirigidoMouseClicked
+
+    private void nodirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nodirMouseClicked
+        dirigido.setSelected(false);
+    }//GEN-LAST:event_nodirMouseClicked
+
+    private void selectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectMouseClicked
+        if (cbOpc.getSelectedIndex() == 0) {
+            vertexIng.setVisible(true);
+            edgesI.setVisible(true);
+            regresar.setVisible(true);
+            select.setVisible(false);
+            label1.setVisible(true);
+            v.setVisible(true);
+            e.setVisible(true);
+            dirigido.setVisible(true);
+            nodir.setVisible(true);
+            btnIng.setVisible(true);
+            nombregra.setVisible(true);
+            V1.setVisible(true);
+        }
+    }//GEN-LAST:event_selectMouseClicked
+
+    private void regresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_regresarMouseClicked
+        nombregra.setText("");
+        vertexIng.setText("");
+        edgesI.setText("");
+        dirigido.setSelected(false);
+        nodir.setSelected(false);
+        dirig = false;
+        select.setVisible(true);
+        vertexIng.setVisible(false);
+        edgesI.setVisible(false);
+        regresar.setVisible(false);
+        label1.setVisible(false);
+        v.setVisible(false);
+        e.setVisible(false);
+        dirigido.setVisible(false);
+        nodir.setVisible(false);
+        btnIng.setVisible(false);
+        nombregra.setVisible(false);
+        V1.setVisible(false);
+    }//GEN-LAST:event_regresarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -222,22 +428,27 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel V1;
+    private javax.swing.JButton btnIng;
+    private javax.swing.JComboBox<String> cbGrafos;
+    private javax.swing.JComboBox<String> cbOpc;
+    private javax.swing.JRadioButton dirigido;
+    private javax.swing.JLabel e;
     private javax.swing.JTextField edgesI;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel label1;
+    private javax.swing.JLabel label2;
+    private javax.swing.JRadioButton nodir;
+    private javax.swing.JTextField nombregra;
+    private javax.swing.JButton regresar;
+    private javax.swing.JButton select;
+    private javax.swing.JButton select2;
+    private javax.swing.JTextArea textArea;
+    private javax.swing.JLabel v;
     private javax.swing.JTextField vertexIng;
     // End of variables declaration//GEN-END:variables
 }
