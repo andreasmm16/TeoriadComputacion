@@ -178,4 +178,50 @@ public class Grafos {
         }
         return imp;
     }
+
+    public int gradoVertice(String nombre, String vertex) {
+        int conteo = 0;
+        for (int x = 0; x < grafos.size(); x++) {
+            if (grafos.get(x).get(1).equals(nombre)) {
+                tmp = x;
+                siono = grafos.get(x).get(0);
+                break;
+                //N si no es dirigido y D si es dirigido
+            }
+        }
+        if (siono.equals("N")) {
+            for (int x = 3; x < grafos.get(tmp).size() - 1; x++) {
+                if (grafos.get(tmp).get(x).equals("{")) {
+                    x++;
+                    for (int a = x; a < grafos.get(tmp).size() - 1; a++) {
+                        if (grafos.get(tmp).get(a).equals(vertex)) {
+                            conteo++;
+                        }
+                        
+                    }
+                    break;
+
+                }
+            }
+            return conteo;
+        } else if (siono.equals("D")) {
+            for (int x = 3; x < grafos.get(tmp).size() - 1; x++) {
+                if (grafos.get(tmp).get(x).equals("{")) {
+                    x++;
+                    for (int a = x; a < grafos.get(tmp).size() - 1; a++) {
+                        if (grafos.get(tmp).get(a).equals(vertex)) {
+                            conteo++;
+                        }
+                        a++;
+                    }
+                    break;
+                }
+            }
+            System.out.println(conteo);
+            return conteo;
+        }
+
+        return 1;
+    }
+
 }

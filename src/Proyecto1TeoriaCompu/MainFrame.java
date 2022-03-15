@@ -73,6 +73,7 @@ public class MainFrame extends javax.swing.JFrame {
         textArea.setVisible(false);
         nombregra.setVisible(false);
         V1.setVisible(false);
+        cbGrafos2.setVisible(false);
 
     }
 
@@ -107,6 +108,7 @@ public class MainFrame extends javax.swing.JFrame {
                         // graphComp.setBounds(500, 100, 450, 400);
                     } else {
                         for (int b = a + 2; b < grafos.grafos.get(x).size() - 1; b++) {
+                            cont=0;
                             String tmp1 = grafos.grafos.get(x).get(b);
                             b++;
                             String tmp2 = grafos.grafos.get(x).get(b);
@@ -189,6 +191,7 @@ public class MainFrame extends javax.swing.JFrame {
         select = new javax.swing.JButton();
         nombregra = new javax.swing.JTextField();
         V1 = new javax.swing.JLabel();
+        cbGrafos2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(212, 217, 226));
@@ -224,7 +227,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnIng);
-        btnIng.setBounds(140, 320, 110, 30);
+        btnIng.setBounds(120, 320, 160, 30);
 
         v.setFont(new java.awt.Font("Arial Black", 0, 15)); // NOI18N
         v.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -355,6 +358,22 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().add(V1);
         V1.setBounds(10, 160, 70, 30);
 
+        cbGrafos2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbGrafos2ItemStateChanged(evt);
+            }
+        });
+        cbGrafos2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbGrafos2MouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                cbGrafos2MouseReleased(evt);
+            }
+        });
+        getContentPane().add(cbGrafos2);
+        cbGrafos2.setBounds(80, 160, 190, 30);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -372,88 +391,110 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIngActionPerformed
 
     private void btnIngMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngMouseClicked
-        if (nombregra.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (!dirigido.isSelected() && !nodir.isSelected()) {
-            JOptionPane.showMessageDialog(null, "Indique si grafo es dirigido o no dirigido", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (vals.validacionesVertex(vertexIng.getText()) == 0) {
-            JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesVertex(vertexIng.getText()) == 1) {
-            JOptionPane.showMessageDialog(null, "Último carácter debe ser \"}\" en Vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesVertex(vertexIng.getText()) == 2) {
-            JOptionPane.showMessageDialog(null, "Primer carácter debe ser \"{\" en Vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesVertex(vertexIng.getText()) == 3) {
-            JOptionPane.showMessageDialog(null, "Elementos en vértices vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesVertex(vertexIng.getText()) == 4) {
-            JOptionPane.showMessageDialog(null, "Elementos en vértices no pueden terminar con coma {num,} -> X", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesVertex(vertexIng.getText()) == 5) {
-            JOptionPane.showMessageDialog(null, "No pueden ir espacios vacios en vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
-        if (dirigido.isSelected()) {
-            dirig = true;
-        } else if (nodir.isSelected()) {
-            dirig = false;
-        }
-
-        if (vals.validacionesEdges(edgesI.getText(), dirig) == 0) {
-            JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 1) {
-            JOptionPane.showMessageDialog(null, "Último carácter debe ser \"}\" en Aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 2) {
-            JOptionPane.showMessageDialog(null, "Primer carácter debe ser \"}\" en Aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 3) {
-            JOptionPane.showMessageDialog(null, "Elementos en aristas vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 4) {
-            JOptionPane.showMessageDialog(null, "Elementos deben ser ingresados (num,num) porque son grafos dirigidos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 5) {
-            JOptionPane.showMessageDialog(null, "Elementos deben ser ingresados {num,num} porque son grafos dirigidos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 6) {
-            JOptionPane.showMessageDialog(null, "Elementos no pueden terminar en coma -> {(),} | {{},} ---> X", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 7) {
-            JOptionPane.showMessageDialog(null, "¡Paréntesis Incompletos en Aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 8) {
-            JOptionPane.showMessageDialog(null, "¡Llaves Incompletas en Aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 9) {
-            JOptionPane.showMessageDialog(null, "¡No pueden ir más de dos elementos dentro de la secuencia! Debe ser-->(num,num) en aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 10) {
-            JOptionPane.showMessageDialog(null, "¡No pueden ir más de dos elementos dentro de la secuencia! Debe ser-->{num,num} en aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 11) {
-            JOptionPane.showMessageDialog(null, "¡No pueden ir espacios vacios en aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else {
-            graf = nombregra.getText();
-            vertices = vertexIng.getText();
-            aristas = edgesI.getText();
-            int x = 0;
-            x = grafos.crearGrafo(graf, dirig, vertices, aristas);
-            if (x == 3) {
-                JOptionPane.showMessageDialog(null, "¡Grafo ya existe!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                graf = "";
-                nombregra.setText("");
-            } else if (x == 2) {
-                JOptionPane.showMessageDialog(null, "¡Una(s) arista ingresado no existe(n) en vértices!", "ERROR", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "¡Grafo ingresado correctamente!", "ÉXITO", JOptionPane.INFORMATION_MESSAGE);
-                nombregra.setText("");
-                vertexIng.setText("");
-                edgesI.setText("");
-                graf = vertices = aristas = "";
+        if (btnIng.getText().equals("Ingresar")) {
+            if (nombregra.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (!dirigido.isSelected() && !nodir.isSelected()) {
+                JOptionPane.showMessageDialog(null, "Indique si grafo es dirigido o no dirigido", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (vals.validacionesVertex(vertexIng.getText()) == 0) {
+                JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesVertex(vertexIng.getText()) == 1) {
+                JOptionPane.showMessageDialog(null, "Último carácter debe ser \"}\" en Vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesVertex(vertexIng.getText()) == 2) {
+                JOptionPane.showMessageDialog(null, "Primer carácter debe ser \"{\" en Vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesVertex(vertexIng.getText()) == 3) {
+                JOptionPane.showMessageDialog(null, "Elementos en vértices vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesVertex(vertexIng.getText()) == 4) {
+                JOptionPane.showMessageDialog(null, "Elementos en vértices no pueden terminar con coma {num,} -> X", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesVertex(vertexIng.getText()) == 5) {
+                JOptionPane.showMessageDialog(null, "No pueden ir espacios vacios en vértices", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            if (dirigido.isSelected()) {
+                dirig = true;
+            } else if (nodir.isSelected()) {
                 dirig = false;
-                x = 0;
-                vertexIng.setVisible(false);
-                edgesI.setVisible(false);
-                regresar.setVisible(false);
-                select.setVisible(true);
-                label1.setVisible(false);
-                v.setVisible(false);
-                e.setVisible(false);
-                nodir.setVisible(false);
-                dirigido.setVisible(false);
-                btnIng.setVisible(false);
-                nombregra.setVisible(false);
-                V1.setVisible(false);
             }
 
+            if (vals.validacionesEdges(edgesI.getText(), dirig) == 0) {
+                JOptionPane.showMessageDialog(null, "Ingresó valor vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 1) {
+                JOptionPane.showMessageDialog(null, "Último carácter debe ser \"}\" en Aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 2) {
+                JOptionPane.showMessageDialog(null, "Primer carácter debe ser \"}\" en Aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 3) {
+                JOptionPane.showMessageDialog(null, "Elementos en aristas vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 4) {
+                JOptionPane.showMessageDialog(null, "Elementos deben ser ingresados (num,num) porque son grafos dirigidos", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 5) {
+                JOptionPane.showMessageDialog(null, "Elementos deben ser ingresados {num,num} porque son grafos dirigidos", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 6) {
+                JOptionPane.showMessageDialog(null, "Elementos no pueden terminar en coma -> {(),} | {{},} ---> X", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 7) {
+                JOptionPane.showMessageDialog(null, "¡Paréntesis Incompletos en Aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 8) {
+                JOptionPane.showMessageDialog(null, "¡Llaves Incompletas en Aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 9) {
+                JOptionPane.showMessageDialog(null, "¡No pueden ir más de dos elementos dentro de la secuencia! Debe ser-->(num,num) en aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 10) {
+                JOptionPane.showMessageDialog(null, "¡No pueden ir más de dos elementos dentro de la secuencia! Debe ser-->{num,num} en aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 11) {
+                JOptionPane.showMessageDialog(null, "¡No pueden ir espacios vacios en aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else {
+                graf = nombregra.getText();
+                vertices = vertexIng.getText();
+                aristas = edgesI.getText();
+                int x = 0;
+                x = grafos.crearGrafo(graf, dirig, vertices, aristas);
+                if (x == 3) {
+                    JOptionPane.showMessageDialog(null, "¡Grafo ya existe!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    graf = "";
+                    nombregra.setText("");
+                } else if (x == 2) {
+                    JOptionPane.showMessageDialog(null, "¡Una(s) arista ingresado no existe(n) en vértices!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡Grafo ingresado correctamente!", "ÉXITO", JOptionPane.INFORMATION_MESSAGE);
+                    nombregra.setText("");
+                    vertexIng.setText("");
+                    edgesI.setText("");
+                    graf = vertices = aristas = "";
+                    dirig = false;
+                    x = 0;
+                    vertexIng.setVisible(false);
+                    edgesI.setVisible(false);
+                    regresar.setVisible(false);
+                    select.setVisible(true);
+                    label1.setVisible(false);
+                    v.setVisible(false);
+                    e.setVisible(false);
+                    nodir.setVisible(false);
+                    dirigido.setVisible(false);
+                    btnIng.setVisible(false);
+                    nombregra.setVisible(false);
+                    V1.setVisible(false);
+                }
+
+            }
+        } else if (btnIng.getText().equals("Calcular grado")) {
+
+            JOptionPane.showMessageDialog(null, "El grado de " + vertexIng.getText() + " es: " + grafos.gradoVertice(cbGrafos2.getSelectedItem().toString(), vertexIng.getText()), "Calcular Grado", JOptionPane.INFORMATION_MESSAGE);
+            vertexIng.setText("");
+            graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+            for (int x = 0; x < grafos.grafos.size(); x++) {
+                if (grafos.grafos.get(x).get(1).equals(cbGrafos2.getSelectedItem().toString())) {
+                    graf = grafos.grafos.get(x).get(1);
+                    if (grafos.grafos.get(x).get(0).equals("D")) {
+                        dirig = true;
+                    } else if (grafos.grafos.get(x).get(0).equals("N")) {
+                        dirig = false;
+                    }
+                    break;
+                }
+            }
+            grafoGrafico(graf, dirig);
+            dirig = false;
+            graf = "";
         }
+
 
     }//GEN-LAST:event_btnIngMouseClicked
 
@@ -473,12 +514,15 @@ public class MainFrame extends javax.swing.JFrame {
             select.setVisible(false);
             label1.setVisible(true);
             v.setVisible(true);
+            v.setText("{V}");
             e.setVisible(true);
             dirigido.setVisible(true);
             nodir.setVisible(true);
             btnIng.setVisible(true);
+            btnIng.setText("Ingresar");
             nombregra.setVisible(true);
             V1.setVisible(true);
+            cbGrafos2.setVisible(false);
         } else if (cbOpc.getSelectedIndex() == 1) {
             nombregra.setText("");
             vertexIng.setText("");
@@ -506,6 +550,7 @@ public class MainFrame extends javax.swing.JFrame {
             for (int x = 0; x < grafos.grafos.size(); x++) {
                 cbGrafos.addItem(grafos.grafos.get(x).get(1));
             }
+            cbGrafos2.setVisible(false);
 
         } else if (cbOpc.getSelectedIndex() == 2) {
             label2.setText("Seleccione grafo a graficar:");
@@ -528,6 +573,31 @@ public class MainFrame extends javax.swing.JFrame {
             V1.setVisible(false);
             for (int x = 0; x < grafos.grafos.size(); x++) {
                 cbGrafos.addItem(grafos.grafos.get(x).get(1));
+            }
+            cbGrafos2.setVisible(false);
+        } else if (cbOpc.getSelectedIndex() == 3) {
+            label1.setVisible(true);
+            vertexIng.setVisible(true);
+            edgesI.setVisible(false);
+            dirig = false;
+            regresar.setVisible(true);
+            select.setVisible(false);
+            label2.setVisible(false);
+            v.setText("V");
+            v.setVisible(true);
+            e.setVisible(false);
+            dirigido.setVisible(false);
+            nodir.setVisible(false);
+            btnIng.setText("Calcular grado");
+            btnIng.setVisible(true);
+            cbGrafos2.setVisible(true);
+            cbGrafos.setVisible(false);
+            select2.setVisible(false);
+            textArea.setVisible(false);
+            nombregra.setVisible(false);
+            V1.setVisible(true);
+            for (int x = 0; x < grafos.grafos.size(); x++) {
+                cbGrafos2.addItem(grafos.grafos.get(x).get(1));
             }
 
         }
@@ -556,19 +626,58 @@ public class MainFrame extends javax.swing.JFrame {
         textArea.setText("");
         textArea.setVisible(false);
         cbGrafos.removeAllItems();
+        cbGrafos2.removeAllItems();
         cbGrafos.setVisible(false);
         select2.setVisible(false);
         label2.setVisible(false);
+        label2.setText("");
         graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+        cbGrafos2.setVisible(false);
     }//GEN-LAST:event_regresarMouseClicked
 
     private void select2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_select2MouseClicked
-        if (cbOpc.getSelectedIndex() == 1) {
-            textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
-        } else if (cbOpc.getSelectedIndex() == 2) {
-           graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+        if (cbGrafos.getItemCount() != 0) {
+            if (cbOpc.getSelectedIndex() == 1) {
+                textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
+            } else if (cbOpc.getSelectedIndex() == 2) {
+                graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+                for (int x = 0; x < grafos.grafos.size(); x++) {
+                    if (grafos.grafos.get(x).get(1).equals(cbGrafos.getSelectedItem().toString())) {
+                        graf = grafos.grafos.get(x).get(1);
+                        if (grafos.grafos.get(x).get(0).equals("D")) {
+                            dirig = true;
+                        } else if (grafos.grafos.get(x).get(0).equals("N")) {
+                            dirig = false;
+                        }
+                        break;
+                    }
+                }
+                textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
+                grafoGrafico(graf, dirig);
+                dirig = false;
+                graf = "";
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "¡No hay grafo seleccionado!", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_select2MouseClicked
+
+    private void cbGrafos2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbGrafos2MouseClicked
+        
+    }//GEN-LAST:event_cbGrafos2MouseClicked
+
+    private void cbGrafos2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbGrafos2ItemStateChanged
+
+
+    }//GEN-LAST:event_cbGrafos2ItemStateChanged
+
+    private void cbGrafos2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbGrafos2MouseReleased
+        graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+        if (cbGrafos2.getItemCount() != 0) {
             for (int x = 0; x < grafos.grafos.size(); x++) {
-                if (grafos.grafos.get(x).get(1).equals(cbGrafos.getSelectedItem().toString())) {
+                if (grafos.grafos.get(x).get(1).equals(cbGrafos2.getSelectedItem().toString())) {
                     graf = grafos.grafos.get(x).get(1);
                     if (grafos.grafos.get(x).get(0).equals("D")) {
                         dirig = true;
@@ -578,13 +687,11 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
                 }
             }
-            textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
             grafoGrafico(graf, dirig);
             dirig = false;
             graf = "";
         }
-
-    }//GEN-LAST:event_select2MouseClicked
+    }//GEN-LAST:event_cbGrafos2MouseReleased
 
     /**
      * @param args the command line arguments
@@ -629,6 +736,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel V1;
     private javax.swing.JButton btnIng;
     private javax.swing.JComboBox<String> cbGrafos;
+    private javax.swing.JComboBox<String> cbGrafos2;
     private javax.swing.JComboBox<String> cbOpc;
     private javax.swing.JRadioButton dirigido;
     private javax.swing.JLabel e;
