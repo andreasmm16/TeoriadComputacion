@@ -145,7 +145,14 @@ public class Validaciones {
                 }
             }
         }
+        
+        for (int x = 0; x < edge.length(); x++) {
+            if (edge.charAt(x)==' ') {
+                // "No pueden ir espacios vacíos" << endl;
+                return 11;
+            }
+        }
 
-        return 11;
+        return 12;
     }
 }

@@ -26,6 +26,8 @@ public class MainFrame extends javax.swing.JFrame {
     protected static mxGraph graph;
     private mxGraphComponent graphComp;
     boolean dirig;
+    Object parent;
+    String graf, vertices, aristas;
 
     public MainFrame() {
         initComponents();
@@ -34,6 +36,7 @@ public class MainFrame extends javax.swing.JFrame {
         grafos = new Grafos();
         vals = new Validaciones();
         dirig = false;
+        graf = vertices = aristas = "";
         this.setLocationRelativeTo(null);
         initGUI();
     }
@@ -44,13 +47,12 @@ public class MainFrame extends javax.swing.JFrame {
         graphComp.setBounds(500, 100, 450, 400);
         graphComp.getViewport().setBackground(Color.white);
         getContentPane().add(graphComp);
-
-        Object parent = graph.getDefaultParent();
-        graph.getModel().beginUpdate();
+        parent = graph.getDefaultParent();
+        /*  graph.getModel().beginUpdate();
         Object v1 = graph.insertVertex(parent, null, "1", 20, 20, 50, 50, "shape=ellipse;strokeColor=black;fillColor=yellow;fontSize=20");
         Object v2 = graph.insertVertex(parent, null, "2", 60, 60, 50, 50, "shape=ellipse;strokeColor=black;fillColor=yellow;fontSize=20");
         graph.insertEdge(parent, null, "", v1, v2, "endArrow=none");
-        graph.getModel().endUpdate();
+        graph.getModel().endUpdate();*/
         vertexIng.setVisible(false);
         edgesI.setVisible(false);
         regresar.setVisible(false);
@@ -67,6 +69,10 @@ public class MainFrame extends javax.swing.JFrame {
         nombregra.setVisible(false);
         V1.setVisible(false);
 
+    }
+    
+    protected void grafoGrafico(){
+        
     }
 
     /*public void deleteSelected(){
@@ -176,6 +182,11 @@ public class MainFrame extends javax.swing.JFrame {
         select2.setForeground(new java.awt.Color(255, 255, 255));
         select2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Proyecto1TeoriaCompu/cursor.png"))); // NOI18N
         select2.setText("Seleccionar");
+        select2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                select2MouseClicked(evt);
+            }
+        });
         getContentPane().add(select2);
         select2.setBounds(210, 400, 140, 30);
 
@@ -199,7 +210,6 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().add(dirigido);
         dirigido.setBounds(70, 280, 110, 25);
 
-        cbGrafos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         getContentPane().add(cbGrafos);
         cbGrafos.setBounds(20, 400, 170, 30);
 
@@ -335,9 +345,42 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡No pueden ir más de dos elementos dentro de la secuencia! Debe ser-->(num,num) en aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
         } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 10) {
             JOptionPane.showMessageDialog(null, "¡No pueden ir más de dos elementos dentro de la secuencia! Debe ser-->{num,num} en aristas", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (vals.validacionesEdges(edgesI.getText(), dirig) == 11) {
+            JOptionPane.showMessageDialog(null, "¡No pueden ir espacios vacios en aristas!", "ERROR", JOptionPane.ERROR_MESSAGE);
         } else {
-            //HACER VERIFICACION QUE ARISTAS EXISTAN EN VERTICES INGRESADOS
-            //SETEAR BOOLEAN DIRIG
+            graf = nombregra.getText();
+            vertices = vertexIng.getText();
+            aristas = edgesI.getText();
+            int x = 0;
+            x = grafos.crearGrafo(graf, dirig, vertices, aristas);
+            if (x == 3) {
+                JOptionPane.showMessageDialog(null, "¡Grafo ya existe!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                graf = "";
+                nombregra.setText("");
+            } else if (x == 2) {
+                JOptionPane.showMessageDialog(null, "¡Una(s) arista ingresado no existe(n) en vértices!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "¡Grafo ingresado correctamente!", "ÉXITO", JOptionPane.INFORMATION_MESSAGE);
+                nombregra.setText("");
+                vertexIng.setText("");
+                edgesI.setText("");
+                graf = vertices = aristas = "";
+                dirig = false;
+                x = 0;
+                vertexIng.setVisible(false);
+                edgesI.setVisible(false);
+                regresar.setVisible(false);
+                select.setVisible(true);
+                label1.setVisible(false);
+                v.setVisible(false);
+                e.setVisible(false);
+                nodir.setVisible(false);
+                dirigido.setVisible(false);
+                btnIng.setVisible(false);
+                nombregra.setVisible(false);
+                V1.setVisible(false);
+            }
+
         }
 
     }//GEN-LAST:event_btnIngMouseClicked
@@ -364,6 +407,33 @@ public class MainFrame extends javax.swing.JFrame {
             btnIng.setVisible(true);
             nombregra.setVisible(true);
             V1.setVisible(true);
+        } else if (cbOpc.getSelectedIndex() == 1) {
+            nombregra.setText("");
+            vertexIng.setText("");
+            edgesI.setText("");
+            dirigido.setSelected(false);
+            nodir.setSelected(false);
+            dirig = false;
+            select.setVisible(false);
+            vertexIng.setVisible(false);
+            edgesI.setVisible(false);
+            regresar.setVisible(true);
+            label1.setVisible(false);
+            v.setVisible(false);
+            e.setVisible(false);
+            dirigido.setVisible(false);
+            nodir.setVisible(false);
+            btnIng.setVisible(false);
+            nombregra.setVisible(false);
+            V1.setVisible(false);
+            label2.setVisible(true);
+            cbGrafos.setVisible(true);
+            select2.setVisible(true);
+            textArea.setVisible(true);
+            for (int x = 0; x < grafos.grafos.size(); x++) {
+                cbGrafos.addItem(grafos.grafos.get(x).get(1));
+            }
+
         }
     }//GEN-LAST:event_selectMouseClicked
 
@@ -386,7 +456,18 @@ public class MainFrame extends javax.swing.JFrame {
         btnIng.setVisible(false);
         nombregra.setVisible(false);
         V1.setVisible(false);
+        graf = vertices = aristas = "";
+        textArea.setText("");
+        textArea.setVisible(false);
+        cbGrafos.removeAllItems();
+        cbGrafos.setVisible(false);
+        select2.setVisible(false);
+        label2.setVisible(false);
     }//GEN-LAST:event_regresarMouseClicked
+
+    private void select2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_select2MouseClicked
+        textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
+    }//GEN-LAST:event_select2MouseClicked
 
     /**
      * @param args the command line arguments
