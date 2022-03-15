@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.w3c.dom.css.RGBColor;
@@ -27,7 +28,10 @@ public class MainFrame extends javax.swing.JFrame {
     private mxGraphComponent graphComp;
     boolean dirig;
     Object parent;
+    int xx, y;
     String graf, vertices, aristas;
+    ArrayList<Object> objs = new ArrayList<Object>();
+    ArrayList<String> vertexes = new ArrayList<String>();
 
     public MainFrame() {
         initComponents();
@@ -37,6 +41,7 @@ public class MainFrame extends javax.swing.JFrame {
         vals = new Validaciones();
         dirig = false;
         graf = vertices = aristas = "";
+        xx = y = 20;
         this.setLocationRelativeTo(null);
         initGUI();
     }
@@ -70,9 +75,76 @@ public class MainFrame extends javax.swing.JFrame {
         V1.setVisible(false);
 
     }
-    
-    protected void grafoGrafico(){
-        
+
+    protected void grafoGrafico(String nombre, boolean sidir) {
+        graph.getModel().beginUpdate();
+        xx = y = 20;
+        //x y y inicializados en 20
+        boolean done = false;
+        int tmp = 0;
+        int cont = 0;
+        for (int x = 0; x < grafos.grafos.size(); x++) {
+            if (grafos.grafos.get(x).get(1).equals(nombre)) {
+                if (!done) {
+                    if (grafos.grafos.get(x).get(0).equals("N")) {
+                        tmp = 1;
+                        done = true;
+                    } else if (grafos.grafos.get(x).get(0).equals("D")) {
+                        tmp = 2;
+                        done = true;
+                    }
+                }
+
+                for (int a = 3; a < grafos.grafos.get(x).size(); a++) {
+                    if (grafos.grafos.get(x).get(a) != "}") {
+                        objs.add(graph.insertVertex(parent, grafos.grafos.get(x).get(a), grafos.grafos.get(x).get(a), xx, y, 50, 50, "shape=ellipse;strokeColor=#E680FF;fillColor=00FFFF;fontSize=20"));
+                        vertexes.add(grafos.grafos.get(x).get(a));
+                        if (xx > 450) {
+                            xx = 20;
+                            y += 100;
+                        }
+                        xx += 60;
+                        // graphComp.setBounds(500, 100, 450, 400);
+                    } else {
+                        for (int b = a + 2; b < grafos.grafos.get(x).size() - 1; b++) {
+                            String tmp1 = grafos.grafos.get(x).get(b);
+                            b++;
+                            String tmp2 = grafos.grafos.get(x).get(b);
+                            Object b1 = null;
+                            Object b2 = null;
+                            for (int q = 0; q < vertexes.size(); q++) {
+                                if (tmp1.equals(vertexes.get(q))) {
+                                    b1 = objs.get(q);
+                                    cont++;
+                                }
+                                if (tmp2.equals(vertexes.get(q))) {
+                                    b2 = objs.get(q);
+                                    cont++;
+                                }
+                                if (cont == 2) {
+                                    break;
+                                }
+                            }
+                            if (tmp == 1) {
+                                graph.insertEdge(parent, null, "", b1, b2, "endArrow=none");
+                            } else if (tmp == 2) {
+                                graph.insertEdge(parent, null, "", b1, b2);
+                            }
+
+                        }
+
+                        break;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        graph.getModel().endUpdate();
+        objs.clear();
+        vertexes.clear();
+
     }
 
     /*public void deleteSelected(){
@@ -427,9 +499,33 @@ public class MainFrame extends javax.swing.JFrame {
             nombregra.setVisible(false);
             V1.setVisible(false);
             label2.setVisible(true);
+            label2.setText("Representar Grafo en forma G= ({V},{E}):");
             cbGrafos.setVisible(true);
             select2.setVisible(true);
             textArea.setVisible(true);
+            for (int x = 0; x < grafos.grafos.size(); x++) {
+                cbGrafos.addItem(grafos.grafos.get(x).get(1));
+            }
+
+        } else if (cbOpc.getSelectedIndex() == 2) {
+            label2.setText("Seleccione grafo a graficar:");
+            vertexIng.setText("");
+            vertexIng.setVisible(false);
+            dirig = false;
+            edgesI.setVisible(false);
+            regresar.setVisible(true);
+            select.setVisible(false);
+            label2.setVisible(true);
+            v.setVisible(false);
+            e.setVisible(false);
+            dirigido.setVisible(false);
+            nodir.setVisible(false);
+            btnIng.setVisible(false);
+            cbGrafos.setVisible(true);
+            select2.setVisible(true);
+            textArea.setVisible(true);
+            nombregra.setVisible(false);
+            V1.setVisible(false);
             for (int x = 0; x < grafos.grafos.size(); x++) {
                 cbGrafos.addItem(grafos.grafos.get(x).get(1));
             }
@@ -463,10 +559,31 @@ public class MainFrame extends javax.swing.JFrame {
         cbGrafos.setVisible(false);
         select2.setVisible(false);
         label2.setVisible(false);
+        graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
     }//GEN-LAST:event_regresarMouseClicked
 
     private void select2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_select2MouseClicked
-        textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
+        if (cbOpc.getSelectedIndex() == 1) {
+            textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
+        } else if (cbOpc.getSelectedIndex() == 2) {
+           graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+            for (int x = 0; x < grafos.grafos.size(); x++) {
+                if (grafos.grafos.get(x).get(1).equals(cbGrafos.getSelectedItem().toString())) {
+                    graf = grafos.grafos.get(x).get(1);
+                    if (grafos.grafos.get(x).get(0).equals("D")) {
+                        dirig = true;
+                    } else if (grafos.grafos.get(x).get(0).equals("N")) {
+                        dirig = false;
+                    }
+                    break;
+                }
+            }
+            textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
+            grafoGrafico(graf, dirig);
+            dirig = false;
+            graf = "";
+        }
+
     }//GEN-LAST:event_select2MouseClicked
 
     /**
