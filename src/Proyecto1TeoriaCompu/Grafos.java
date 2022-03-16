@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Grafos {
 
     public ArrayList<ArrayList<String>> grafos = new ArrayList<>();
-    public ArrayList<String> grafosImp = new ArrayList<>();
+    public ArrayList<String> found = new ArrayList<>();
     String tm, siono, imp;
     int tmp;
 
@@ -141,7 +141,6 @@ public class Grafos {
                         done = true;
                     }
                 }
-
                 for (int a = 3; a < grafos.get(x).size(); a++) {
                     if (grafos.get(x).get(a) != "}") {
                         imp = imp + grafos.get(x).get(a) + ", ";
@@ -162,7 +161,6 @@ public class Grafos {
                                 b++;
                                 imp = imp + grafos.get(x).get(b) + "), ";
                             }
-
                         }
                         StringBuilder sb2 = new StringBuilder(imp);
                         sb2.deleteCharAt(imp.length() - 1);
@@ -197,10 +195,8 @@ public class Grafos {
                         if (grafos.get(tmp).get(a).equals(vertex)) {
                             conteo++;
                         }
-                        
                     }
                     break;
-
                 }
             }
             return conteo;
@@ -220,8 +216,50 @@ public class Grafos {
             System.out.println(conteo);
             return conteo;
         }
-
         return 1;
     }
 
+    public boolean validarCiclos(String nombre) {
+        found.clear();
+        int conteo = 0;
+        int tm = 0;
+        int cantA = 0;
+        String V = "";
+        for (int x = 0; x < grafos.size(); x++) {
+            if (grafos.get(x).get(1).equals(nombre)) {
+                tmp = x;
+                break;
+            }
+        }
+        for (int x = 3; x < grafos.get(tmp).size() - 1; x++) {
+            if (grafos.get(tmp).get(x).equals("{")) {
+                x++;
+                tm = x;
+                cantA = grafos.get(tmp).size() - x - 1;
+                break;
+            } else {
+
+            }
+        }
+        for (int x = tm; x < grafos.get(tmp).size(); x++) {
+            V = grafos.get(tmp).get(x);
+            for (int a = tm; a < grafos.get(tmp).size() - 1; a++) {
+                if (grafos.get(tmp).get(a).equals(V)) {
+                    conteo++;
+                }
+            }
+            if (conteo >= 2 && !found.contains(V)) {
+                found.add(V);
+            }
+            conteo = 0;
+        }
+        if (found.size() > 2 && found.size() == (cantA / 2)) {
+            tmp = 0;
+            return true;
+        } else {
+            tmp = 0;
+            return false;
+        }
+
+    }
 }

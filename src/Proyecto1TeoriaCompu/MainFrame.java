@@ -108,7 +108,7 @@ public class MainFrame extends javax.swing.JFrame {
                         // graphComp.setBounds(500, 100, 450, 400);
                     } else {
                         for (int b = a + 2; b < grafos.grafos.get(x).size() - 1; b++) {
-                            cont=0;
+                            cont = 0;
                             String tmp1 = grafos.grafos.get(x).get(b);
                             b++;
                             String tmp2 = grafos.grafos.get(x).get(b);
@@ -493,6 +493,18 @@ public class MainFrame extends javax.swing.JFrame {
             grafoGrafico(graf, dirig);
             dirig = false;
             graf = "";
+        } else if (btnIng.getText().equals("Validar ciclos")) {
+            if (cbGrafos2.getItemCount() != 0) {
+                if (grafos.validarCiclos(cbGrafos2.getSelectedItem().toString())) {
+                    JOptionPane.showMessageDialog(null, "Si hay ciclos en grafo", "Validar Ciclos", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    JOptionPane.showMessageDialog(null, "No hay ciclos en grafo", "Validar Ciclos", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "¡No hay grafo seleccionado!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+
         }
 
 
@@ -600,7 +612,20 @@ public class MainFrame extends javax.swing.JFrame {
                 cbGrafos2.addItem(grafos.grafos.get(x).get(1));
             }
 
+        } else if (cbOpc.getSelectedIndex() == 4) {
+            regresar.setVisible(true);
+            select.setVisible(false);
+            label1.setVisible(true);
+            dirig = false;
+            V1.setVisible(true);
+            cbGrafos2.setVisible(true);
+            for (int x = 0; x < grafos.grafos.size(); x++) {
+                cbGrafos2.addItem(grafos.grafos.get(x).get(1));
+            }
+            btnIng.setText("Validar ciclos");
+            btnIng.setVisible(true);
         }
+
     }//GEN-LAST:event_selectMouseClicked
 
     private void regresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_regresarMouseClicked
@@ -665,7 +690,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_select2MouseClicked
 
     private void cbGrafos2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbGrafos2MouseClicked
-        
+
     }//GEN-LAST:event_cbGrafos2MouseClicked
 
     private void cbGrafos2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbGrafos2ItemStateChanged
@@ -707,16 +732,24 @@ public class MainFrame extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
