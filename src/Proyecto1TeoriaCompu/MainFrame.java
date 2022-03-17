@@ -4,7 +4,6 @@
  */
 package Proyecto1TeoriaCompu;
 
-import static Proyecto1TeoriaCompu.Main.grafos;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import java.awt.Color;
@@ -32,6 +31,7 @@ public class MainFrame extends javax.swing.JFrame {
     String graf, vertices, aristas;
     ArrayList<Object> objs = new ArrayList<Object>();
     ArrayList<String> vertexes = new ArrayList<String>();
+    ArrayList<String> aris = new ArrayList<String>();
 
     public MainFrame() {
         initComponents();
@@ -77,7 +77,65 @@ public class MainFrame extends javax.swing.JFrame {
 
     }
 
-    protected void grafoGrafico(String nombre, boolean sidir) {
+    protected void aristasCamino(String aristas, String name) {
+        aris.clear();
+        int tmp = 0;
+        // String siono="";
+        for (int x = 0; x < grafos.grafos.size(); x++) {
+            if (grafos.grafos.get(x).get(1).equals(name)) {
+                //        siono = grafos.grafos.get(x).get(0);
+                //graf es siono para saber si dir
+                tmp = x;
+                break;
+            }
+        }
+        String tm = "";
+        int ar = 0;//donde empiezan aristas
+        int cont = 0;
+        int cantAris = 0;
+        for (int x = 3; x < grafos.grafos.get(tmp).size() - 1; x++) {
+            if (grafos.grafos.get(tmp).get(x).equals("{")) {
+                x++;
+                ar = x;
+                break;
+            }
+        }
+        String tm1 = "";
+        String tm2 = "";
+        for (int x = 0; x < aristas.length(); x++) {
+            //Ingresar vertices
+            if (aristas.charAt(x) != '(' && aristas.charAt(x) != ')' && aristas.charAt(x) != ',') {
+                tm += aristas.charAt(x);
+            } else {
+                if (x != 0) {
+                    if (tm1.equals("")) {
+                        tm1 = tm;
+                        tm = "";
+                        cantAris++;
+                    } else if (tm2.equals("")) {
+                        tm2 = tm;
+                        tm = "";
+                        cantAris++;
+                    }
+                }
+
+            }
+            if (!tm1.equals("") && !tm2.equals("")) {
+
+                aris.add(tm1);
+                aris.add(tm2);
+                tm1 = tm2;
+                tm2 = "";
+            }
+
+        }
+        for (int x = 0; x < aris.size(); x++) {
+            System.out.print(aris.get(x) + " - ");
+        }
+        System.out.println("");
+    }
+
+    protected void grafoGrafico(String nombre, boolean sidir, ArrayList<String> aristas) {
         graph.getModel().beginUpdate();
         xx = y = 20;
         //x y y inicializados en 20
@@ -107,8 +165,12 @@ public class MainFrame extends javax.swing.JFrame {
                         xx += 60;
                         // graphComp.setBounds(500, 100, 450, 400);
                     } else {
+                        String c = "";
+                        String c2 = "";
                         for (int b = a + 2; b < grafos.grafos.get(x).size() - 1; b++) {
                             cont = 0;
+                            c = "";
+                            c2 = "";
                             String tmp1 = grafos.grafos.get(x).get(b);
                             b++;
                             String tmp2 = grafos.grafos.get(x).get(b);
@@ -117,10 +179,12 @@ public class MainFrame extends javax.swing.JFrame {
                             for (int q = 0; q < vertexes.size(); q++) {
                                 if (tmp1.equals(vertexes.get(q))) {
                                     b1 = objs.get(q);
+                                    c = vertexes.get(q);
                                     cont++;
                                 }
                                 if (tmp2.equals(vertexes.get(q))) {
                                     b2 = objs.get(q);
+                                    c2 = vertexes.get(q);
                                     cont++;
                                 }
                                 if (cont == 2) {
@@ -128,21 +192,34 @@ public class MainFrame extends javax.swing.JFrame {
                                 }
                             }
                             if (tmp == 1) {
+                                if (aris.contains(c) && aris.contains(c2)) {
+                                    graph.insertEdge(parent, null, "", b1, b2, "strokeColor=#B90E0A;endArrow=none");
+                                } else {
+                                    graph.insertEdge(parent, null, "", b1, b2, "endArrow=none");
+                                }
+
+                            } else if (tmp == 2) {
+                                if (aris.contains(c) && aris.contains(c2)) {
+                                    graph.insertEdge(parent, null, "", b1, b2, "strokeColor=#B90E0A");
+                                } else {
+                                    graph.insertEdge(parent, null, "", b1, b2);
+                                }
+
+                            }
+                            /*  if (tmp == 1) {
                                 graph.insertEdge(parent, null, "", b1, b2, "endArrow=none");
                             } else if (tmp == 2) {
                                 graph.insertEdge(parent, null, "", b1, b2);
-                            }
+                            }*/
 
                         }
 
                         break;
                     }
                 }
-
                 break;
             }
         }
-
         graph.getModel().endUpdate();
         objs.clear();
         vertexes.clear();
@@ -475,7 +552,6 @@ public class MainFrame extends javax.swing.JFrame {
 
             }
         } else if (btnIng.getText().equals("Calcular grado")) {
-
             JOptionPane.showMessageDialog(null, "El grado de " + vertexIng.getText() + " es: " + grafos.gradoVertice(cbGrafos2.getSelectedItem().toString(), vertexIng.getText()), "Calcular Grado", JOptionPane.INFORMATION_MESSAGE);
             vertexIng.setText("");
             graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
@@ -490,17 +566,46 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
                 }
             }
-            grafoGrafico(graf, dirig);
+            grafoGrafico(graf, dirig, aris);
             dirig = false;
             graf = "";
         } else if (btnIng.getText().equals("Validar ciclos")) {
             if (cbGrafos2.getItemCount() != 0) {
                 if (grafos.validarCiclos(cbGrafos2.getSelectedItem().toString())) {
                     JOptionPane.showMessageDialog(null, "Si hay ciclos en grafo", "Validar Ciclos", JOptionPane.INFORMATION_MESSAGE);
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "No hay ciclos en grafo", "Validar Ciclos", JOptionPane.INFORMATION_MESSAGE);
                 }
 
+            } else {
+                JOptionPane.showMessageDialog(null, "¡No hay grafo seleccionado!", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else if (btnIng.getText().equals("Validar camino")) {
+            if (cbGrafos2.getItemCount() != 0) {
+                if (grafos.validarCamino(cbGrafos2.getSelectedItem().toString(), vertexIng.getText())) {
+                    for (int x = 0; x < grafos.grafos.size(); x++) {
+                        if (grafos.grafos.get(x).get(1).equals(cbGrafos2.getSelectedItem().toString())) {
+                            graf = grafos.grafos.get(x).get(1);
+                            if (grafos.grafos.get(x).get(0).equals("D")) {
+                                dirig = true;
+                            } else if (grafos.grafos.get(x).get(0).equals("N")) {
+                                dirig = false;
+                            }
+                            break;
+                        }
+                    }
+                    graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+                    aristasCamino(vertexIng.getText(), graf);
+                    grafoGrafico(cbGrafos2.getSelectedItem().toString(), dirig, aris);
+                    JOptionPane.showMessageDialog(null, "Camino Válido", "Validar Ciclos", JOptionPane.INFORMATION_MESSAGE);
+                    dirig = false;
+                    graf = "";
+                    vertexIng.setText("");
+                    aris.clear();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Camino no válido", "Validar Ciclos", JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "¡No hay grafo seleccionado!", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -624,6 +729,19 @@ public class MainFrame extends javax.swing.JFrame {
             }
             btnIng.setText("Validar ciclos");
             btnIng.setVisible(true);
+        } else if (cbOpc.getSelectedIndex() == 5) {
+            regresar.setVisible(true);
+            select.setVisible(false);
+            label1.setVisible(true);
+            dirig = false;
+            V1.setVisible(true);
+            cbGrafos2.setVisible(true);
+            for (int x = 0; x < grafos.grafos.size(); x++) {
+                cbGrafos2.addItem(grafos.grafos.get(x).get(1));
+            }
+            btnIng.setText("Validar camino");
+            btnIng.setVisible(true);
+            vertexIng.setVisible(true);
         }
 
     }//GEN-LAST:event_selectMouseClicked
@@ -678,7 +796,7 @@ public class MainFrame extends javax.swing.JFrame {
                     }
                 }
                 textArea.setText(grafos.impGrafo(cbGrafos.getSelectedItem().toString()));
-                grafoGrafico(graf, dirig);
+                grafoGrafico(graf, dirig, aris);
                 dirig = false;
                 graf = "";
             }
@@ -699,7 +817,8 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cbGrafos2ItemStateChanged
 
     private void cbGrafos2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbGrafos2MouseReleased
-        graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
+
+         graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
         if (cbGrafos2.getItemCount() != 0) {
             for (int x = 0; x < grafos.grafos.size(); x++) {
                 if (grafos.grafos.get(x).get(1).equals(cbGrafos2.getSelectedItem().toString())) {
@@ -712,10 +831,11 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
                 }
             }
-            grafoGrafico(graf, dirig);
+            grafoGrafico(graf, dirig, aris);
             dirig = false;
             graf = "";
         }
+
     }//GEN-LAST:event_cbGrafos2MouseReleased
 
     /**

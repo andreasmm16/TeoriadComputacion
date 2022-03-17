@@ -225,8 +225,10 @@ public class Grafos {
         int tm = 0;
         int cantA = 0;
         String V = "";
+        siono = "";
         for (int x = 0; x < grafos.size(); x++) {
             if (grafos.get(x).get(1).equals(nombre)) {
+                siono = grafos.get(x).get(0);
                 tmp = x;
                 break;
             }
@@ -237,8 +239,13 @@ public class Grafos {
                 tm = x;
                 cantA = grafos.get(tmp).size() - x - 1;
                 break;
-            } else {
-
+            }
+        }
+        for(int x=tm;tm<grafos.get(tmp).size();x++){
+            if(x!=(grafos.get(tmp).size()-2)){
+                if(grafos.get(tmp).get(x).equals(grafos.get(tmp).get(x+1))){
+                    return true;
+                }
             }
         }
         for (int x = tm; x < grafos.get(tmp).size(); x++) {
@@ -260,6 +267,94 @@ public class Grafos {
             tmp = 0;
             return false;
         }
+    }
 
+    public boolean validarCamino(String name, String aristas) {
+        for (int x = 0; x < grafos.size(); x++) {
+            if (grafos.get(x).get(1).equals(name)) {
+                siono = grafos.get(x).get(0);
+                tmp = x;
+                break;
+            }
+        }
+        tm = "";
+        int si = 0;
+        int ar = 0;//donde empiezan aristas
+        int cont = 0;
+        int cantAris = 0;
+        for (int x = 3; x < grafos.get(tmp).size() - 1; x++) {
+            if (grafos.get(tmp).get(x).equals("{")) {
+                x++;
+                ar = x;
+                break;
+            }
+        }
+        String tm1 = "";
+        String tm2 = "";
+        for (int x = 0; x < aristas.length(); x++) {
+            //Ingresar vertices
+            if (aristas.charAt(x) != '(' && aristas.charAt(x) != ')' && aristas.charAt(x) != ',') {
+                tm += aristas.charAt(x);
+            } else {
+                if (x != 0) {
+                    if (tm1.equals("")) {
+                        tm1 = tm;
+                        tm = "";
+                        cantAris++;
+                    } else if (tm2.equals("")) {
+                        tm2 = tm;
+                        tm = "";
+                        cantAris++;
+                    }
+                }
+
+            }
+            si = 0;
+            if (!tm1.equals("") && !tm2.equals("")) {
+                if (siono.equals("N")) {
+                    for (int a = ar; a < grafos.get(tmp).size(); a++) {
+                        if (grafos.get(tmp).get(a).equals(tm1)) {
+                            if (grafos.get(tmp).get(a + 1).equals(tm2)) {
+                                si = 1;
+                                cont += 2;
+                            }
+                        }
+                        if (a < grafos.get(tmp).size()-1) {
+                            if (grafos.get(tmp).get(a + 1).equals(tm1) && si == 0) {
+                                if (grafos.get(tmp).get(a).equals(tm2)) {
+                                    cont += 2;
+                                }
+                            }
+                        }
+
+                    }
+                } else if (siono.equals("D")) {
+                    for (int a = ar; a < grafos.get(tmp).size(); a++) {
+                        if (grafos.get(tmp).get(a).equals(tm1)) {
+                            if (grafos.get(tmp).get(a + 1).equals(tm2)) {
+                                cont++;
+                            }
+                        }
+                    }
+                }
+                tm1 = tm2;
+                tm2 = "";
+                si = 0;
+            }
+        }
+        if (siono.equals("N")) {
+            if (cont == ((cantAris - 1) * 2)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (siono.equals("D")) {
+            if (cont == (cantAris - 1)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 }
