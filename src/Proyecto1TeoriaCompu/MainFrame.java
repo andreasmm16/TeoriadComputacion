@@ -83,8 +83,6 @@ public class MainFrame extends javax.swing.JFrame {
         // String siono="";
         for (int x = 0; x < grafos.grafos.size(); x++) {
             if (grafos.grafos.get(x).get(1).equals(name)) {
-                //        siono = grafos.grafos.get(x).get(0);
-                //graf es siono para saber si dir
                 tmp = x;
                 break;
             }
@@ -226,17 +224,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     }
 
-    /*public void deleteSelected(){
-    jButton1.addActionListener(new ActionListener(){
-    // cell = component.getCellAt(e.getX(), e.getY());
-
-    @Override
-    public void actionPerformed(ActionEvent arg0){
-        graph.selectChildCell();
-        graph.removeCells();
-    }
-});
-}*/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
